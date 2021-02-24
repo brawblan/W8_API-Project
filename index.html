@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+  <link rel="stylesheet" href="./css/theme.css">
+  <link rel="stylesheet" href="./css/base.css">
+  <link rel="stylesheet" href="./css/styles.css">
+  <title>API Project</title>
+</head>
+<body>
+    <!-- Theme Tab -->
+  <div class="theme-panel">
+    <div class="theme-body">
+      <span>Change Theme</span>
+      <div class="btn-group">
+        <button data-toggle="light" class="switcher-btn active">Light</button>
+        <button data-toggle="dark" class="switcher-btn">Dark</button>
+      </div>
+      <button class="theme-tab">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <nav class="navbar">
+      <div class="brand-logo">
+        <h2>API Project</h2>
+      </div>
+      <div class="navbar-nav">
+        <ul class="ul-defaults-none main-menu">
+          <li class="nav-item">Home</li>
+          <li class="nav-item" data-open="favorites">Favorites</li>
+          <li class="nav-item" data-open="watchLater">Watch Later</li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- This section displays the cards, they can be filtered through by clicking li filter -->
+  <section class="api-section">
+    <div class="search-container">
+      <label for="search">
+        <input class="search-input" autocomplete="off" id="search" type="text" placeholder="Search...">
+        <i class="fas fa-search"></i>
+      </label>
+      <ul class="api-filter-nav ul-defaults-none">
+        <!-- Rename all these to filter api types -->
+        <li data-filter="all" class="filter-link active">All</li>
+        <li data-filter="starwars" class="filter-link">Star Wars</li>
+        <li data-filter="avengers" class="filter-link">Avengers</li>
+        <li data-filter="disney" class="filter-link">Disney</li>
+        <li data-filter="alpha" class="filter-link">A-Z</li>
+        <li data-filter="back-alpha" class="filter-link">Z-A</li>
+      </ul>
+    </div>
+      <div class="api-grid">
+        <!-- Movie Card Display -->
+      </div>
+  </section>
+
+  <!-- Modal with list 'My List' -->
+  <section class="modal">
+    <h2 class="header-md">favorites</h2>
+    <div class="my-list-carousel">
+
+      <!-- This item will be dynamically created -->
+      <div class="my-list-card">
+        This will be dynamically added through JS
+      </div>
+    
+    </div>
+  </section>
+
+    <!-- favorites Modal -->
+    <div id="favorites" class="modal page-block" data-animation="zoomInOut">
+      <div class="container-fluid">
+        <header class="modal-header">
+          <h3>favorites</h3>
+          <i class="fas fa-times" data-close></i>
+        </header>
+        <div class="favs-modal-body">
+          <!-- dynamically created -->
+        </div>
+      </div>
+    </div>
+
+    <!-- watch later Modal -->
+    <div id="watchLater" class="modal page-block" data-animation="zoomInOut">
+      <div class="container-fluid">
+        <header class="modal-header">
+          <h3>watch later</h3>
+          <i class="fas fa-times" data-close></i>
+        </header>
+        <div class="watch-modal-body">
+          <!-- dynamically created -->
+        </div>
+      </div>
+    </div>
+  
+  <script src="./js/main.js"></script>
+  <script src="./js/theme.js"></script>
+</body>
+</html>
