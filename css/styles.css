@@ -241,11 +241,10 @@
 /* Modals */
 .modal {
   display: flex;
-  background-color: var(--bg-modal);
+  background-color: rgba(0, 0, 0, 0.8);
   border-radius: 8px;
   cursor: pointer;
   position: fixed;
-  margin: 100px 100px;
   top: 0;
   bottom: 0;
   left: 0;
@@ -255,6 +254,23 @@
   visibility: hidden;
   opacity: 0;
   z-index: 99;
+}
+
+.movie-modal {
+  margin: auto;
+  max-width: 300px;
+  max-height: 400px;
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  overflow: hidden;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  cursor: default;
+  box-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
 }
 
 .modal.is-visible,
@@ -291,29 +307,36 @@
   justify-content: flex-end;
 }
 
+.modal-content {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  background: #171a23b2;
+  padding: 0 2rem;
+}
+.modal-content h3,
+.modal-content h4,
+.modal-content .fa-plus {
+  color: #fff;
+}
 .modal-content h3 {
   margin-bottom: 2rem;
 }
-.modal-content {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 2rem;
-}
-.modal-content .modal-text h4 {
+.modal-content h4 {
   cursor: pointer;
 }
-.modal-content .modal-text h4:active {
+.modal-content h4:active {
   transform: translateY(3px);
+}
+.movie-modal .fa-times {
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content .modal-text {
   display: flex;
   flex-direction: column;
-}
-.modal-content h3,
-.modal-content h4,
-.modal-content .fa-plus {
-  color: var(--color-text-modal);
 }
 
 .modal-body {
@@ -322,21 +345,6 @@
 }
 .modal-body .fa-times {
   text-align: right;
-}
-
-
-.modal-dialog {
-  max-width: 800px;
-  max-height: 80vh;
-  background-color: var(--bg-panel);
-  color: var(--color-text-base);
-  overflow: hidden;
-  padding: 1.25rem 1.85rem;
-  border-radius: 5px;
-  cursor: default;
-}
-.modal-dialog .modal-header h3 {
-  color: var(--color-text-base);
 }
 
 [data-animation="zoomInOut"].modal {
