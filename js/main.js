@@ -202,11 +202,27 @@ const addMovieToWatch = () => {
               <h3>${Title}</h3>
             </div>
           </div>
+          <div class="remove-card">Remove Card <i class="fas fa-times" data-close></i></div>
         </div>
       `) 
     }
   ).join('')
   displayWatch.innerHTML = movieCards
+  // Give classes to first 3 cards added
+  if (watchLater.length === 1) {
+    displayWatch.childNodes[1].classList.add('active')
+  } else if (watchLater.length === 2) {
+    displayWatch.childNodes[1].classList.add('active')
+    displayWatch.childNodes[3].classList.add('next')
+  } else if (watchLater.length === 3) {
+    displayWatch.childNodes[1].classList.add('active')
+    displayWatch.childNodes[3].classList.add('next')
+    displayWatch.childNodes[5].classList.add('prev')
+  } else {
+    displayWatch.childNodes[1].classList.add('active')
+    displayWatch.childNodes[3].classList.add('next')
+    displayWatch.childNodes[5].classList.add('prev')
+  }
 }
 
 // Full Site Modal open (favs and watch later)
@@ -262,13 +278,11 @@ document.body.addEventListener('click', function() {
 
 // Remove Modals 
 const removeElem = (elm) => {
-  setTimeout(function() {
-    if (elm.classList.contains('modal.movie-modal')) {
-      elm.remove()
-    }
-  }, 1000)
+  if (elm.classList.contains('modal.movie-modal') || elm.classList.contains('modal') || elm.classList.contains('active')) {
+    elm.remove()
+  }
 }
-document.body.addEventListener('click', (e) => {
+document.addEventListener('click', (e) => {
   if (e.target === document.querySelector('.modal.is-visible')) {
     const elm = document.querySelector('.modal')
     document.querySelector('.modal.is-visible').classList.remove(isVisible)
@@ -286,27 +300,35 @@ document.addEventListener('keyup', (e) => {
 const removeFavOrWatch = (e) => {
   if (e.target.parentElement.parentElement.parentElement === document.querySelector('.modal.is-visible')) {
     document.querySelector('.modal.is-visible').classList.remove(isVisible)
-    setTimeout(function() {
+    document.addEventListener('click', function() {
       const elm = document.getElementById(e.target.parentElement.parentElement.parentElement.id)
       if (elm) {
         removeElem(elm)
       }
-    }, 500)
+    })
   }
 }
 
+// Add to favorites/watch later, add back to main list 
+document.addEventListener('click', function(e) {
+  if (e.target.querySelector('.fa-plus.fav')) {
+    popMovieFromMovieArr(e, true)
+  } else if (e.target.querySelector('.fa-plus.watch')) {
+    popMovieFromMovieArr(e, false)
+  } else if (e.target.querySelector('.remove-card')) {
+    if (e.target.children[1].classList.contains('favs-modal-body')) {
+      popMovieFromList(e, true)
+    } else if (e.target.children[1].classList.contains('watch-modal-body')) {
+      popMovieFromList(e, false)
+    }
+  }
+})
+
 const popMovieFromMovieArr = (e, boolean) => {
   for (const movie of movieArr) {
-    if (movie.Title.toLowerCase().includes('star')) {
-      star.pop(movie)
-    }  else if (movie.Title.toLowerCase().includes('avengers')) {
-      avengers.pop(movie)
-    } else if (movie.Title.toLowerCase().includes('disney')) {
-      disney.pop(movie)
-    }
     if (movie.Title === e.target.parentElement.children[0].innerText) {
       movieArr.splice(movieArr.indexOf(movie), 1)
-      favorites.push(movie)
+      boolean ? favorites.push(movie) : watchLater.push(movie)
       createCards(movieArr)
       boolean ? addMovieToFav() : addMovieToWatch()
       removeFavOrWatch(e)
@@ -314,11 +336,14 @@ const popMovieFromMovieArr = (e, boolean) => {
   }
 }
 
-// Add to favorites/watch later 
-document.addEventListener('click', function(e) {
-  if (e.target.querySelector('.fa-plus.fav')) {
-    popMovieFromMovieArr(e, true)
-  } else if (e.target.querySelector('.fa-plus.watch')) {
-    popMovieFromMovieArr(e, false)
+const popMovieFromList = (e, boolean) => {
+  for (const movie of boolean ? favorites : watchLater) {
+    if (e.target.childNodes[3].innerText.includes(movie.Title)) {
+      boolean ? favorites.splice(favorites.indexOf(movie), 1) : watchLater.splice(favorites.indexOf(movie), 1)
+      movieArr.push(movie)
+      createCards(movieArr)
+      removeFavOrWatch(e)
+      removeElem(e.target.children[1].children[0])
+    }
   }
-})
+}
