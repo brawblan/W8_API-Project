@@ -7,7 +7,8 @@ const isVisible = 'is-visible'
 const dataFilter = '[data-filter]'
 const apiData = '[data-item]'
 const movieDisplayGrid = document.querySelector('.api-grid')
-const displayFavorites = document.querySelector('.favs-modal-body')
+const displayFavs = document.querySelector('.favs-modal-body')
+const displayWatch = document.querySelector('.watch-modal-body')
 const root = document.documentElement
 let favorites = []
 let watchLater = []
@@ -17,9 +18,9 @@ const allCount = document.getElementById('all')
 const starCount = document.getElementById('starWars')
 const avengersCount = document.getElementById('avengers')
 const disneyCount = document.getElementById('disney')
-let star = 0 
-let avengers = 0 
-let disney = 0 
+let star = [] 
+let avengers = [] 
+let disney = [] 
 
 // Movie APIs
 const filterLink = document.querySelectorAll(dataFilter)
@@ -31,13 +32,16 @@ let movieArr = []
 const openModal = document.querySelectorAll(modalOpen)
 const closeModal = document.querySelectorAll(modalClose)
 const modalPopup = document.createElement('div')
+const removeMovieFromList = document.querySelectorAll('.remove-card')
 
 // Create Movie Cards
 // 91651c1a personal api_key
-const starWarsURL = 'http://www.omdbapi.com/?s=star_wars&Page=1&apikey=263d22d8'
-const avengersURL = 'http://www.omdbapi.com/?s=avengers&Page=1&apikey=263d22d8'
-const disneyURL = 'http://www.omdbapi.com/?s=disney&Page=3&apikey=263d22d8'
+const starWarsURL = 'http://www.omdbapi.com/?s=star_wars&Page=1&apikey=91651c1a'
+const avengersURL = 'http://www.omdbapi.com/?s=avengers&Page=1&apikey=91651c1a'
+const disneyURL = 'http://www.omdbapi.com/?s=disney&Page=3&apikey=91651c1a'
 const movieURLs = [starWarsURL, avengersURL, disneyURL]
+
+// Functions //////////////////////////////////////////////////
 const filterURLs = async () => {
   for (const url of movieURLs) {
     const res = await fetch(url)
@@ -47,6 +51,7 @@ const filterURLs = async () => {
   }
 }
 filterURLs()
+
 const createCards = (movieArr) => {
   const movieCards = movieArr
     .map(
@@ -65,28 +70,39 @@ const createCards = (movieArr) => {
       }
     ).join('')
   movieDisplayGrid.innerHTML = movieCards 
+  countMovies()
 }
+
+// Initial card creation
 setTimeout(function() {
   createCards(movieArr)
 }, 500)
 
 // Count Type of Movie
-setTimeout(function() {
+const countMovies = () => {
+  star = []
+  avengers = []
+  disney = []
   movieArr.map((movie) => {
     if (movie.Title.toLowerCase().includes('star')) {
-      star++
+      star.push(movie)
     }  else if (movie.Title.toLowerCase().includes('avengers')) {
-      avengers++
+      avengers.push(movie)
     } else if (movie.Title.toLowerCase().includes('disney')) {
-      disney++
+      disney.push(movie)
     }
   })
-  let totalCount = star + avengers + disney
-  allCount.innerText = `All (${totalCount})`
-  starCount.innerText = `Star Wars (${star})`
-  avengersCount.innerText = `Avengers (${avengers})`
-  disneyCount.innerText = `Disney (${disney})`
-}, 1000)
+  let totalCount = [...star, ...avengers, ...disney]
+  allCount.innerText = `All (${totalCount.length})`
+  starCount.innerText = `Star Wars (${star.length})`
+  avengersCount.innerText = `Avengers (${avengers.length})`
+  disneyCount.innerText = `Disney (${disney.length})`
+}
+document.addEventListener('click', function(e) {
+  if (e.target.querySelector('.fa-plus.fav') || e.target.querySelector('.fa-plus.watch')) {
+    countMovies()
+  }
+})
 
 // Link Filter
 const setFilterActive = (elm, selector) => {
@@ -103,10 +119,10 @@ for (const link of filterLink) {
       const cardData = card.dataset.item.toLowerCase()
       if (filter === 'alpha') {
         movieArr.sort((a, b) => (a.Title > b.Title) ? 1 : -1)    
-        createCards()
+        createCards(movieArr)
       } else if (filter === 'back-alpha') {
         movieArr.sort((a, b) => (a.Title < b.Title) ? 1 : -1)    
-        createCards()
+        createCards(movieArr)
       } else if (filter === 'all') {
         card.style.display = 'block'
       } else if (cardData.includes(filter)) {
@@ -119,7 +135,7 @@ for (const link of filterLink) {
 }
 
 // Create Movie Modal Popup
-const createMovieCard = (Poster, imdbID, Title) => {
+const createModalCard = (Poster, imdbID, Title) => {
   const movieCard = (`
     <div id=${imdbID} class="modal" data-animation="zoomInOut">
       <div class="movie-modal" style="background-image: url(${Poster})">
@@ -137,12 +153,48 @@ const createMovieCard = (Poster, imdbID, Title) => {
   modalPopup.innerHTML = movieCard
 }
 
-const addMovieToFav = (favorites) => {
+// Add to list
+const addMovieToFav = () => {
   const movieCards = favorites
   .map(
     ({ Title, Year, Poster, imdbID }) => {
       return (`
-        <div class="api-card" data-open="${imdbID}" data-item="${Title}">
+        <div class="list-card" data-open="${imdbID}" data-item="${Title}">
+          <div class="card-body">
+            <img src=${Poster} alt="movie poster">
+            <div class="card-popup-box">
+              <div>${Year}</div>
+              <h3>${Title}</h3>
+            </div>
+          </div>
+          <div class="remove-card">Remove Card <i class="fas fa-times" data-close></i></div>
+        </div>
+      `) 
+    }
+  ).join('')
+  displayFavs.innerHTML = movieCards
+    // Give classes to first 3 cards added
+  if (favorites.length === 1) {
+    displayFavs.childNodes[1].classList.add('active')
+  } else if (favorites.length === 2) {
+    displayFavs.childNodes[1].classList.add('active')
+    displayFavs.childNodes[3].classList.add('next')
+  } else if (favorites.length === 3) {
+    displayFavs.childNodes[1].classList.add('active')
+    displayFavs.childNodes[3].classList.add('next')
+    displayFavs.childNodes[5].classList.add('prev')
+  } else {
+    displayFavs.childNodes[1].classList.add('active')
+    displayFavs.childNodes[3].classList.add('next')
+    displayFavs.childNodes[5].classList.add('prev')
+  }
+}
+const addMovieToWatch = () => {
+  const movieCards = watchLater
+  .map(
+    ({ Title, Year, Poster, imdbID }) => {
+      return (`
+        <div class="list-card" data-open="${imdbID}" data-item="${Title}">
           <div class="card-body">
             <img src=${Poster} alt="movie poster">
             <div class="card-popup-box">
@@ -154,11 +206,11 @@ const addMovieToFav = (favorites) => {
       `) 
     }
   ).join('')
-  displayFavorites.innerHTML = movieCards
+  displayWatch.innerHTML = movieCards
 }
 
 // Full Site Modal open (favs and watch later)
-setTimeout(function() {
+document.addEventListener('click', function() {
   for (const elm of document.querySelectorAll('[data-open]')) {
     elm.addEventListener('click', () => {
       const modalId = elm.dataset.open
@@ -172,29 +224,32 @@ setTimeout(function() {
       }, 100)
     })
   }
-}, 1000)
+})
 
 // Movie Poster Popup Modal open
-setTimeout(function() {
-  for (const elm of document.querySelectorAll('[data-open]')) {
-    elm.addEventListener('click', () => {
-      const poster = elm.lastElementChild.childNodes[1]['src']
-      const imdbID = elm.dataset.open
-      const title = elm.dataset.item
-      createMovieCard(poster, imdbID, title)
-
-      const modalId = elm.dataset.open
-      for (const i of modalPopup.children) {
-        if (i.id === modalId) {
-          document.body.appendChild(i)
+document.addEventListener('click', function() {
+    for (const elm of document.querySelectorAll('[data-open]')) {
+      elm.addEventListener('click', () => {
+        let poster
+        if (elm.lastElementChild) {
+          poster = elm.lastElementChild.childNodes[1]['src']
         }
-      }
-      setTimeout(function() {
-        document.getElementById(modalId).classList.add(isVisible)
-      }, 100)
-    })
-  }
-}, 1000)
+        const imdbID = elm.dataset.open
+        const title = elm.dataset.item
+        createModalCard(poster, imdbID, title)
+  
+        const modalId = elm.dataset.open
+        for (const i of modalPopup.children) {
+          if (i.id === modalId) {
+            document.body.appendChild(i)
+          }
+        }
+        setTimeout(function() {
+          document.getElementById(modalId).classList.add(isVisible)
+        }, 100)
+      })
+    }
+})
 
 // Full Site Modal 'close buttons'
 document.body.addEventListener('click', function() {
@@ -228,17 +283,42 @@ document.addEventListener('keyup', (e) => {
   }
 })
 
-// Add to favorites 
+const removeFavOrWatch = (e) => {
+  if (e.target.parentElement.parentElement.parentElement === document.querySelector('.modal.is-visible')) {
+    document.querySelector('.modal.is-visible').classList.remove(isVisible)
+    setTimeout(function() {
+      const elm = document.getElementById(e.target.parentElement.parentElement.parentElement.id)
+      if (elm) {
+        removeElem(elm)
+      }
+    }, 500)
+  }
+}
+
+const popMovieFromMovieArr = (e, boolean) => {
+  for (const movie of movieArr) {
+    if (movie.Title.toLowerCase().includes('star')) {
+      star.pop(movie)
+    }  else if (movie.Title.toLowerCase().includes('avengers')) {
+      avengers.pop(movie)
+    } else if (movie.Title.toLowerCase().includes('disney')) {
+      disney.pop(movie)
+    }
+    if (movie.Title === e.target.parentElement.children[0].innerText) {
+      movieArr.splice(movieArr.indexOf(movie), 1)
+      favorites.push(movie)
+      createCards(movieArr)
+      boolean ? addMovieToFav() : addMovieToWatch()
+      removeFavOrWatch(e)
+    }
+  }
+}
+
+// Add to favorites/watch later 
 document.addEventListener('click', function(e) {
   if (e.target.querySelector('.fa-plus.fav')) {
-    for (const movie of movieArr) {
-      if (movie.Title === e.target.parentElement.children[0].innerText) {
-        console.log(movieArr.indexOf(movie));
-        movieArr.splice(movieArr.indexOf(movie), 1)
-        favorites.push(movie)
-        createCards(movieArr)
-        addMovieToFav(favorites)
-      }
-    }
+    popMovieFromMovieArr(e, true)
+  } else if (e.target.querySelector('.fa-plus.watch')) {
+    popMovieFromMovieArr(e, false)
   }
 })

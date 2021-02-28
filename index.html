@@ -42,11 +42,7 @@
 
   <!-- This section displays the cards, they can be filtered through by clicking li filter -->
   <section class="api-section">
-    <div class="search-container">
-      <label for="search">
-        <input class="search-input" autocomplete="off" id="search" type="text" placeholder="Search...">
-        <i class="fas fa-search"></i>
-      </label>
+    <div class="filter-container">
       <ul class="api-filter-nav ul-defaults-none">
         <!-- Rename all these to filter api types -->
         <li id="all" data-filter="all" class="filter-link active">All</li>
@@ -85,6 +81,14 @@
         <div class="favs-modal-body">
           <!-- dynamically created -->
         </div>
+        <div class="slide-ctrl-container">
+          <button>
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <button>
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -98,10 +102,19 @@
         <div class="watch-modal-body">
           <!-- dynamically created -->
         </div>
+        <div class="slide-ctrl-container">
+          <button>
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <button>
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
       </div>
     </div>
   
   <script src="./js/main.js"></script>
+  <script src="./js/carousel.js"></script>
   <script src="./js/theme.js"></script>
 </body>
 </html>
