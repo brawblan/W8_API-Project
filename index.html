@@ -33,8 +33,8 @@
       <div class="navbar-nav">
         <ul class="ul-defaults-none main-menu">
           <li class="nav-item">Home</li>
-          <li class="nav-item" data-open="favorites">Favorites</li>
-          <li class="nav-item" data-open="watchLater">Watch Later</li>
+          <li id="boomer" class="nav-item" data-modal="favorites">Favorites</li>
+          <li id="millennial" class="nav-item" data-modal="watchLater">Watch Later</li>
         </ul>
       </div>
     </nav>
@@ -56,19 +56,6 @@
       <div class="api-grid">
         <!-- Movie Card Display -->
       </div>
-  </section>
-
-  <!-- Modal with list 'My List' -->
-  <section class="modal">
-    <h2 class="header-md">favorites</h2>
-    <div class="my-list-carousel">
-
-      <!-- This item will be dynamically created -->
-      <div class="my-list-card">
-        This will be dynamically added through JS
-      </div>
-    
-    </div>
   </section>
 
     <!-- favorites Modal -->
@@ -114,7 +101,8 @@
     </div>
   
   <script src="./js/main.js"></script>
-  <script src="./js/carousel.js"></script>
+  <script src="./js/FavCarousel.js"></script>
+  <script src="./js/WatchListCarousel.js"></script>
   <script src="./js/theme.js"></script>
 </body>
 </html>
