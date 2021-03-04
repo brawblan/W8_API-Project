@@ -14,40 +14,47 @@ document.getElementById('millennial').addEventListener('click', function() {
 })
 
 const goToNumWatch = (number) => {
-  watchCurrent = number
-  watchNext = watchCurrent < watchSlides.length - 1 ? watchCurrent + 1 : 0
-  watchPrev = watchCurrent > 0 ? watchCurrent - 1 : watchSlides.length - 1
+  if (watchSlides.length === 2) {
+    watchCurrent = number
+    watchNext = watchCurrent === 0 ? 1 : 0
 
-  if (watchSlides.length === 1) {
-    // watchSlides.forEach((slide) => {
-    //   slide.classList.remove('active')
-    // })
-    // watchSlides[watchCurrent].classList.add('active')
-  } else if (watchSlides.length >= 2) {
     watchSlides.forEach((slide) => {
       slide.classList.remove('active', 'next')
     })
     watchSlides[watchCurrent].classList.add('active')
     watchSlides[watchNext].classList.add('next')
+
+  } else if (watchSlides.length > 2) {
+    watchCurrent = number
+    watchNext = watchCurrent < watchSlides.length - 1 ? watchCurrent + 1 : 0
+    watchPrev = watchCurrent > 0 ? watchCurrent - 1 : watchSlides.length - 1
+    
+    watchSlides.forEach((slide) => {
+      slide.classList.remove('active', 'next', 'prev')
+    })
+    watchSlides[watchCurrent].classList.add('active')
+    watchSlides[watchNext].classList.add('next')
+    watchSlides[watchPrev].classList.add('prev')
   }
 }
 
 const goToNextWatch = () => {
   if (watchSlides.length === 2) {
-    watchCurrent < watchSlides.length - 1 
+    watchCurrent === 0 
       ? goToNumWatch(1)
       : goToNumWatch(0)
-  } else if (watchSlides.length >= 3) {
+  } else if (watchSlides.length > 2) {
     watchCurrent < watchSlides.length - 1 
       ? goToNumWatch(watchCurrent + 1) 
       : goToNumWatch(0)
   } 
 }
+
 const goToPrevWatch = () => {
   if (watchSlides.length === 2) {
-    watchCurrent > 0 
-      ? goToNumWatch(1) 
-      : goToNumWatch(0)
+    watchCurrent === 0 
+      ? goToNumWatch(0) 
+      : goToNumWatch(1)
   } else if (watchSlides.length >= 3) {
     watchCurrent > 0 
       ? goToNumWatch(watchCurrent - 1) 

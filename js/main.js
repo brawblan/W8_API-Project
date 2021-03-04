@@ -49,6 +49,7 @@ const filterURLs = async () => {
     const resJson = await res.json()
     const resArr = resJson.Search
     movieArr.push(...resArr)
+    createCards(movieArr)
   }
 }
 filterURLs()
@@ -103,11 +104,6 @@ const createCards = (movieArr) => {
   countMovies()
 }
 
-// Initial card creation
-setTimeout(function() {
-  createCards(movieArr)
-}, 500)
-
 // Link Filter
 const setFilterActive = (elm, selector) => {
   if (document.querySelector(`${selector}.${active}`) !== null) {
@@ -117,33 +113,33 @@ const setFilterActive = (elm, selector) => {
 }
 
 // Uses setFilterActive to set Filters AND filters through the movieArr to leave just the movies of the selected filter type
+let filter
 for (const link of filterLink) {
-
   link.addEventListener('click', function() {
     setActive(link, '.filter-link')
-    const filter = link.dataset.filter
-    console.log(filter);
-
-    if (filter === 'alpha') {
-      movieArr.sort((a, b) => (a.Title > b.Title) ? 1 : -1)    
-      createCards(movieArr)
-    } else if (filter === 'back-alpha') {
-      movieArr.sort((a, b) => (a.Title < b.Title) ? 1 : -1)    
-      createCards(movieArr)
-    } else {
-      document.querySelectorAll('[data-item]').forEach((card) => {
-        const cardData = card.dataset.item.toLowerCase()
-        if (filter === 'all') {
-          card.style.display = 'block'
-        } else if (cardData.includes(filter)) {
-          card.style.display = 'block'
-        } else {
-          card.style.display = 'none'
-        }
-      })
-    }
-
+    filter = link.dataset.filter    
+    filterCards(filter)
   })
+}
+const filterCards = (filter) => {
+  if (filter === 'alpha') {
+    movieArr.sort((a, b) => (a.Title > b.Title) ? 1 : -1)    
+    createCards(movieArr)
+  } else if (filter === 'back-alpha') {
+    movieArr.sort((a, b) => (a.Title < b.Title) ? 1 : -1)    
+    createCards(movieArr)
+  } else {
+    document.querySelectorAll('[data-item]').forEach((card) => {
+      const cardData = card.dataset.item.toLowerCase()
+      if (filter === 'all') {
+        card.style.display = 'block'
+      } else if (cardData.includes(filter)) {
+        card.style.display = 'block'
+      } else {
+        card.style.display = 'none'
+      }
+    })
+  }
 }
 
 // Create Movie Modal Popup
@@ -254,19 +250,44 @@ const popMovieFromMovieArr = (e, boolean) => {
       createCards(movieArr)
       boolean ? addMovieToFav() : addMovieToWatch()
       removeFavOrWatch(e)
+      if (filter) {
+        filterCards(filter)
+      }
     }
   }
 }
 
 const popMovieFromList = (e, boolean) => {
   for (const movie of boolean ? favorites : watchLater) {
-    if (e.target.children[1].children[0].classList.contains('active')) {
-      boolean ? favorites.splice(favorites.indexOf(movie), 1) : watchLater.splice(favorites.indexOf(movie), 1)
-      movieArr.push(movie)
-      createCards(movieArr)
-      removeFavOrWatch(e)
-      removeElem(e.target.children[1].children[0])
+    console.log(e.target.children[1].childNodes);
+    const nodes = e.target.children[1].childNodes
+    for(const i of nodes) {
+      if (i !== 'undefined') {
+        console.log(i.classList.contains('active'));
+      }
     }
+    // if (e.target.children[1].childNodes.classList.contains('active')) {
+    //   boolean ? favorites.splice(favorites.indexOf(movie), 1) : watchLater.splice(favorites.indexOf(movie), 1)
+    //   movieArr.push(movie)
+    //   removeFavOrWatch(e)
+    //   removeElem(e.target.children[1].children[0])
+    //   createCards(movieArr)
+    //   if (filter) {
+    //     filterCards(filter)
+    //   }
+    // }
+  }
+}
+
+const removeFavOrWatch = (e) => {
+  if (e.target.parentElement.parentElement.parentElement === document.querySelector('.modal.is-visible')) {
+    document.querySelector('.modal.is-visible').classList.remove(isVisible)
+    document.addEventListener('click', function(e) {
+      const elm = document.getElementById(e.target.parentElement.parentElement.parentElement.id)
+      if (elm) {
+        removeElem(elm)
+      }
+    })
   }
 }
 
@@ -323,15 +344,7 @@ document.body.addEventListener('click', function() {
   }
 })
 
-// Remove Modals 
-const removeElem = (elm) => {
-  if (elm.classList.contains('modal') || elm.classList.contains('active')) {
-    elm.remove()
-  } else if (elm.parentElement.classList.contains('movie-modal')) {
-    elm.remove()
-  }
-}
-
+// Remove Modals w/click
 document.addEventListener('click', (e) => {
   if (e.target === document.querySelector('.modal.is-visible')) {
     const elm = document.querySelector('.modal.is-visible')
@@ -343,6 +356,7 @@ document.addEventListener('click', (e) => {
   }
 })
 
+// Remove Modals w/ESC
 document.body.addEventListener('keyup', (e) => {
   if (e.key === 'Escape') {
     const elm = document.querySelector('.modal.is-visible')
@@ -351,14 +365,11 @@ document.body.addEventListener('keyup', (e) => {
   }
 })
 
-const removeFavOrWatch = (e) => {
-  if (e.target.parentElement.parentElement.parentElement === document.querySelector('.modal.is-visible')) {
-    document.querySelector('.modal.is-visible').classList.remove(isVisible)
-    document.addEventListener('click', function(e) {
-      const elm = document.getElementById(e.target.parentElement.parentElement.parentElement.id)
-      if (elm) {
-        removeElem(elm)
-      }
-    })
+// Remove Modals from DOM
+const removeElem = (elm) => {
+  if (elm.classList.contains('active')) {
+    elm.remove()
+  } else if (elm.parentElement.classList.contains('movie-modal')) {
+    elm.remove()
   }
 }
