@@ -116,7 +116,7 @@ const setFilterActive = (elm, selector) => {
 let filter
 for (const link of filterLink) {
   link.addEventListener('click', function() {
-    setActive(link, '.filter-link')
+    setFilterActive(link, '.filter-link')
     filter = link.dataset.filter    
     filterCards(filter)
   })
@@ -260,22 +260,22 @@ const popMovieFromMovieArr = (e, boolean) => {
 const popMovieFromList = (e, boolean) => {
   for (const movie of boolean ? favorites : watchLater) {
     console.log(e.target.children[1].childNodes);
-    const nodes = e.target.children[1].childNodes
-    for(const i of nodes) {
-      if (i !== 'undefined') {
-        console.log(i.classList.contains('active'));
-      }
-    }
-    // if (e.target.children[1].childNodes.classList.contains('active')) {
-    //   boolean ? favorites.splice(favorites.indexOf(movie), 1) : watchLater.splice(favorites.indexOf(movie), 1)
-    //   movieArr.push(movie)
-    //   removeFavOrWatch(e)
-    //   removeElem(e.target.children[1].children[0])
-    //   createCards(movieArr)
-    //   if (filter) {
-    //     filterCards(filter)
+    // const nodes = e.target.children[1].childNodes
+    // for(const i of nodes) {
+    //   if (i !== 'undefined') {
+    //     console.log(i.classList.contains('active'));
     //   }
     // }
+    if (e.target.children[1].childNodes.classList.contains('active')) {
+      boolean ? favorites.splice(favorites.indexOf(movie), 1) : watchLater.splice(favorites.indexOf(movie), 1)
+      movieArr.push(movie)
+      removeFavOrWatch(e)
+      removeElem(e.target.children[1].children[0])
+      createCards(movieArr)
+      if (filter) {
+        filterCards(filter)
+      }
+    }
   }
 }
 

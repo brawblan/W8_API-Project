@@ -1,3 +1,15 @@
+:root {
+  --bg: #f5f5f5;
+  --bg-panel: #fff;
+  --bg-modal: #161c2d;
+  --color-headings: #161c2d;
+  --color-text-opacity: rgba(22, 28, 45, 0.7);
+  --color-text: #161c2d;
+  --color-text-base: #161c2d;
+  --color-text-modal: #fff;
+  --border: #383f53;
+}
+
 section,
 footer,
 header,

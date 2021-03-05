@@ -1,13 +1,10 @@
 /* NavBar */
 .navbar {
   display: flex;
-  flex-flow: row nowrap;
+  flex-direction: column;
+  align-items: center;
   padding: 0.5rem 1rem;
   width: 100%;
-}
-
-.navbar .navbar-nav {
-  margin-left: auto;
 }
 
 .navbar.sticky {
@@ -29,6 +26,20 @@
   line-height: 26px;
   cursor: pointer;
   text-transform: lowercase;
+  transition: 0.1s ease-in;
+  box-shadow: 1px 3px 2px rgb(104, 104, 104), 0 0 1px black;
+  border-radius: 8px;
+  margin: 0 8px;
+}
+.main-menu .nav-item:hover {
+  text-decoration: underline;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+}
+.main-menu .nav-item:active {
+  position: relative;
+  top: 3px;
+  box-shadow: 0 0 1px black;
 }
 
 .navbar-toggler {
@@ -49,89 +60,6 @@
   display: none;
 }
 
-/* Theme Toggle */
-.theme-panel {
-  position: fixed;
-  right: 0;
-  top: 25%;
-  z-index: 100;
-  transition: 0.4s;
-  transform: translateX(100%);
-}
-.theme-panel.open {
-  transform: translateX(0);
-}
-
-.theme-body {
-  background-color: #495fef;
-  border: transparent;
-  max-width: 185px;
-  padding: 15px 13px;
-  text-align: center;
-  border-bottom-left-radius: 25px;
-  position: relative;
-}
-
-.theme-body > span {
-  color: white;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: -0.09px;
-  line-height: 26px;
-  padding-bottom: 8px;
-  display: inline-flex;
-}
-
-.theme-body .btn-group {
-  box-shadow: 0 12px 34px rgba(22, 28, 45, 0.2);
-  border-radius: 33px;
-  background-color: white;
-  overflow: hidden;
-  display: flex;
-  max-width: 153px;
-}
-
-.theme-body .btn-group .switcher-btn {
-  background: transparent;
-  border: none;
-  width: 50%;
-  font-size: 11px;
-  font-weight: 700;
-  height: 42px;
-  padding-left: 15px;
-  padding-right: 15px;
-  letter-spacing: 1.4px;
-  text-transform: uppercase;
-}
-.theme-body .btn-group .switcher-btn.active {
-  background-color: #ced4e7;
-}
-
-.theme-body .theme-tab {
-  position: absolute;
-  top: 0;
-  transform: translateX(-100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 50px;
-  border: 0;
-  background-color: #495fef;
-  color: white;
-  border-bottom-left-radius: 10px;
-  border-top-left-radius: 10px;
-  left: 1px;
-}
-.theme-tab i {
-  font-size: 1rem;
-  transition: 0.4s;
-  pointer-events: none;
-}
-.theme-panel.open .theme-tab i {
-  transform: scaleX(-1);
-}
-
 /* API search */
 .filter-container {
 display: flex;
@@ -145,14 +73,26 @@ justify-content: center;
 }
 
 .api-filter-nav .filter-link {
-  padding: 0 1rem;
+  padding: 1rem;
   font-size: 0.8125rem;
   line-height: 1.6;
   letter-spacing: 1.63px;
   font-weight: 700;
-}
+  transition: 0.1s ease-in;
+  box-shadow: 1px 3px 2px rgb(104, 104, 104), 0 0 1px black;
+  border-radius: 8px;
+  margin: 0 8px;
+  }
 .api-filter-nav .filter-link:hover {
   cursor: pointer;
+  text-decoration: underline;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+}
+.api-filter-nav .filter-link:active {
+  position: relative;
+  top: 3px;
+  box-shadow: 0 0 1px black;
 }
 .api-filter-nav .filter-link.active {
   color: #495fef;
@@ -291,6 +231,11 @@ justify-content: center;
 .movie-modal-header,
 .modal-header h3 {
   color: var(--color-text-modal);
+}
+.modal-header h3 {
+  padding: 0.5rem;
+  border-radius: 8px;
+  background-color: var(--color-text-opacity);
 }
 .modal-header .fa-times,
 .movie-modal-header .fa-times {
@@ -450,14 +395,16 @@ justify-content: center;
   }
 
   [aria-expanded="true"] ~ ul {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     position: absolute;
     right: 0;
     top: 50px;
-    background-image: linear-gradient(to left, transparent, rgba(255, 255, 255, 0.7));
+    background-color: var(--bg);
     width: 100%;
-    text-align: left;
-    box-shadow: 0 0 20px rgba(52, 49, 75, 0.1);  
+    box-shadow: 0 0 20px rgb(52 49 75 / 10%);
+    height: 100%;
   }
 
   [aria-expanded="true"] ~ ul li {
@@ -465,8 +412,24 @@ justify-content: center;
     color: var(--color-text-base);
   }
 
+  .main-menu .nav-item {
+    width: fit-content;
+    margin: 0.5rem;
+  }
+
   .api-filter-nav {
     flex-direction: column;
     padding: 0 1rem;
+  }
+
+  .api-filter-nav .filter-link {
+    padding: 0.2rem 1rem;
+    margin: 0.5rem;
+    text-align: center;
+  }
+
+  .favs-modal-body,
+  .watch-modal-body {
+    margin-top: 40px;
   }
 }
