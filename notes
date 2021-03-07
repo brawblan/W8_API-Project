@@ -1,5 +1,5 @@
-both slider buttons go same direction (only watchList is working, copy or find a way to get both on one JS file)
-
 when I remove a card from a list, can I make the other cards change classes to active and next?
 
-reset filter to what it was on before clicking list
+why does clicking remove take away 2 or all of the list cards?
+
+why does clicking modal body remove list card?

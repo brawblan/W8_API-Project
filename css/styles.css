@@ -342,10 +342,13 @@ justify-content: center;
 .list-card.next { transform: translateX(75%); }
 
 /* Slide Ctrl Arrows */
+
+.watch-slide-ctrl-container,
 .slide-ctrl-container {
   margin-top: 150px;
   text-align: center;
 }
+.watch-slide-ctrl-container button,
 .slide-ctrl-container button {
   background: none;
   border: none;
@@ -355,10 +358,13 @@ justify-content: center;
   transition: all 0.3s ease-in-out;
   opacity: 0.75;
 }
+.watch-slide-ctrl-container button:hover,
 .slide-ctrl-container button:hover {
   opacity: 1;
 }
+.watch-slide-ctrl-container button:nth-child(1),
 .slide-ctrl-container button:nth-child(1) { padding-right: 10px; }
+.watch-slide-ctrl-container button:nth-child(2),
 .slide-ctrl-container button:nth-child(2) { padding-left: 10px; }
 
 /* Modal Animations */

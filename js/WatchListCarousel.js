@@ -4,22 +4,16 @@ let watchPrev
 let watchSlides = []
 let watchButtons = []
 
-document.getElementById('millennial').addEventListener('click', function() {
+const setListPage = () => {
   watchSlides = document.querySelectorAll('.list-card')
-  watchButtons = document.querySelectorAll('.slide-ctrl-container button')
+  watchButtons = document.querySelectorAll('.watch-slide-ctrl-container button')
   
   for (let i = 0; i < watchButtons.length; i++) {
     watchButtons[i].addEventListener('click', () => i === 0 ? goToPrevWatch() : goToNextWatch())
   }
-})
-
-if (watchSlides.length === 1) {
-  console.log(watchSlides);
-    watchSlides.forEach((slide) => {
-        slide.classList.remove('active', 'next', 'prev')
-      })
-      watchSlides[0].classList.add('active')
 }
+
+document.getElementById('millennial').addEventListener('click', setListPage)
 
 const goToNumWatch = (number) => {
   if (watchSlides.length === 2) {
@@ -32,7 +26,7 @@ const goToNumWatch = (number) => {
     watchSlides[watchCurrent].classList.add('active')
     watchSlides[watchNext].classList.add('next')
 
-  } else if (watchSlides.length > 2) {
+  } else if (watchSlides.length >= 3) {
     watchCurrent = number
     watchNext = watchCurrent < watchSlides.length - 1 ? watchCurrent + 1 : 0
     watchPrev = watchCurrent > 0 ? watchCurrent - 1 : watchSlides.length - 1
@@ -49,23 +43,23 @@ const goToNumWatch = (number) => {
 const goToNextWatch = () => {
   if (watchSlides.length === 2) {
     watchCurrent === 0 
-      ? goToNumWatch(1)
-      : goToNumWatch(0)
+    ? goToNumWatch(1)
+    : goToNumWatch(0)
   } else if (watchSlides.length >= 3) {
     watchCurrent < watchSlides.length - 1 
-      ? goToNumWatch(watchCurrent + 1) 
-      : goToNumWatch(0)
+    ? goToNumWatch(watchCurrent + 1) 
+    : goToNumWatch(0)
   } 
 }
 
 const goToPrevWatch = () => {
   if (watchSlides.length === 2) {
     watchCurrent === 0 
-      ? goToNumWatch(1) 
-      : goToNumWatch(0)
+    ? goToNumWatch(1) 
+    : goToNumWatch(0)
   } else if (watchSlides.length >= 3) {
     watchCurrent > 0 
       ? goToNumWatch(watchCurrent - 1) 
       : goToNumWatch(watchSlides.length - 1)
+    }
   }
-}

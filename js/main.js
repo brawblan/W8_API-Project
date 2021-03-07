@@ -260,18 +260,14 @@ const removeMovieFromMovieArr = (e, boolean) => {
 const removeMovieFromListArr = (e, boolean) => {
   for (const movie of boolean ? favorites : watchLater) {
     const nodes = e.target.children[1].children
+    console.log(nodes);
     for(const i of nodes) {
-      if (i !== 'undefined') {
-        console.log(i);
-        console.log(watchLater);
+      if (i.classList.contains('active')) {
         boolean ? favorites.splice(favorites.indexOf(movie), 1) : watchLater.splice(watchLater.indexOf(movie), 1)
         movieArr.push(movie)
         removeFavOrWatch(e)
         removeElem(e.target.children[1].children[0])
         createCards(movieArr)
-        if (filter) {
-          filterCards(filter)
-        }
       }
     }
   }
@@ -302,7 +298,9 @@ document.body.addEventListener('click', function() {
       }
       setTimeout(function() {
         document.getElementById(modalId).classList.add(isVisible)
+        const elm = document.getElementById('all')
         filter = 'all'
+        setFilterActive(elm, '.filter-link')
         filterCards(filter)
       }, 100)
     })
