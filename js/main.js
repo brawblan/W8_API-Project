@@ -230,19 +230,19 @@ const addMovieToWatch = () => {
 // Add to favorites/watchLater, add back to main list 
 document.body.addEventListener('click', function(e) {
   if (e.target.querySelector('.fa-plus.fav')) {
-    popMovieFromMovieArr(e, true)
+    removeMovieFromMovieArr(e, true)
   } else if (e.target.querySelector('.fa-plus.watch')) {
-    popMovieFromMovieArr(e, false)
+    removeMovieFromMovieArr(e, false)
   } else if (e.target.querySelector('.remove-card')) {
     if (e.target.children[1].classList.contains('favs-modal-body')) {
-      popMovieFromList(e, true)
+      removeMovieFromListArr(e, true)
     } else if (e.target.children[1].classList.contains('watch-modal-body')) {
-      popMovieFromList(e, false)
+      removeMovieFromListArr(e, false)
     }
   }
 })
 
-const popMovieFromMovieArr = (e, boolean) => {
+const removeMovieFromMovieArr = (e, boolean) => {
   for (const movie of movieArr) {
     if (movie.Title === e.target.parentElement.children[0].innerText) {
       movieArr.splice(movieArr.indexOf(movie), 1)
@@ -257,23 +257,21 @@ const popMovieFromMovieArr = (e, boolean) => {
   }
 }
 
-const popMovieFromList = (e, boolean) => {
+const removeMovieFromListArr = (e, boolean) => {
   for (const movie of boolean ? favorites : watchLater) {
-    console.log(e.target.children[1].childNodes);
-    // const nodes = e.target.children[1].childNodes
-    // for(const i of nodes) {
-    //   if (i !== 'undefined') {
-    //     console.log(i.classList.contains('active'));
-    //   }
-    // }
-    if (e.target.children[1].childNodes.classList.contains('active')) {
-      boolean ? favorites.splice(favorites.indexOf(movie), 1) : watchLater.splice(favorites.indexOf(movie), 1)
-      movieArr.push(movie)
-      removeFavOrWatch(e)
-      removeElem(e.target.children[1].children[0])
-      createCards(movieArr)
-      if (filter) {
-        filterCards(filter)
+    const nodes = e.target.children[1].children
+    for(const i of nodes) {
+      if (i !== 'undefined') {
+        console.log(i);
+        console.log(watchLater);
+        boolean ? favorites.splice(favorites.indexOf(movie), 1) : watchLater.splice(watchLater.indexOf(movie), 1)
+        movieArr.push(movie)
+        removeFavOrWatch(e)
+        removeElem(e.target.children[1].children[0])
+        createCards(movieArr)
+        if (filter) {
+          filterCards(filter)
+        }
       }
     }
   }
@@ -304,6 +302,8 @@ document.body.addEventListener('click', function() {
       }
       setTimeout(function() {
         document.getElementById(modalId).classList.add(isVisible)
+        filter = 'all'
+        filterCards(filter)
       }, 100)
     })
   }

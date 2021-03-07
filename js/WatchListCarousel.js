@@ -13,13 +13,21 @@ document.getElementById('millennial').addEventListener('click', function() {
   }
 })
 
+if (watchSlides.length === 1) {
+  console.log(watchSlides);
+    watchSlides.forEach((slide) => {
+        slide.classList.remove('active', 'next', 'prev')
+      })
+      watchSlides[0].classList.add('active')
+}
+
 const goToNumWatch = (number) => {
   if (watchSlides.length === 2) {
     watchCurrent = number
     watchNext = watchCurrent === 0 ? 1 : 0
 
     watchSlides.forEach((slide) => {
-      slide.classList.remove('active', 'next')
+      slide.classList.remove('active', 'next', 'prev')
     })
     watchSlides[watchCurrent].classList.add('active')
     watchSlides[watchNext].classList.add('next')
@@ -43,7 +51,7 @@ const goToNextWatch = () => {
     watchCurrent === 0 
       ? goToNumWatch(1)
       : goToNumWatch(0)
-  } else if (watchSlides.length > 2) {
+  } else if (watchSlides.length >= 3) {
     watchCurrent < watchSlides.length - 1 
       ? goToNumWatch(watchCurrent + 1) 
       : goToNumWatch(0)
@@ -53,8 +61,8 @@ const goToNextWatch = () => {
 const goToPrevWatch = () => {
   if (watchSlides.length === 2) {
     watchCurrent === 0 
-      ? goToNumWatch(0) 
-      : goToNumWatch(1)
+      ? goToNumWatch(1) 
+      : goToNumWatch(0)
   } else if (watchSlides.length >= 3) {
     watchCurrent > 0 
       ? goToNumWatch(watchCurrent - 1) 
