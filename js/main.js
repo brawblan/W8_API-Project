@@ -38,9 +38,9 @@ const modalPopup = document.createElement('div')
 const removeMovieFromList = document.querySelectorAll('.remove-card')
 
 // Create Movie Cards
-const starWarsURL = 'http://www.omdbapi.com/?s=star_wars&Page=1&apikey=91651c1a'
-const avengersURL = 'http://www.omdbapi.com/?s=avengers&Page=1&apikey=91651c1a'
-const disneyURL = 'http://www.omdbapi.com/?s=disney&Page=3&apikey=91651c1a'
+const starWarsURL = 'https://www.omdbapi.com/?s=star_wars&Page=1&apikey=91651c1a'
+const avengersURL = 'https://www.omdbapi.com/?s=avengers&Page=1&apikey=91651c1a'
+const disneyURL = 'https://www.omdbapi.com/?s=disney&Page=3&apikey=91651c1a'
 const movieURLs = [starWarsURL, avengersURL, disneyURL]
 
 // Functions //////////////////////////////////////////////////
