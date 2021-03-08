@@ -9,7 +9,6 @@ const apiData = '[data-item]'
 const movieDisplayGrid = document.querySelector('.api-grid')
 const displayFavs = document.querySelector('.favs-modal-body')
 const displayWatch = document.querySelector('.watch-modal-body')
-const root = document.documentElement
 let favorites = []
 let watchLater = []
 const addFavList = document.querySelector('.fa-plus.fav')
@@ -20,6 +19,8 @@ const allCount = document.getElementById('all')
 const starCount = document.getElementById('starWars')
 const avengersCount = document.getElementById('avengers')
 const disneyCount = document.getElementById('disney')
+const favCount = document.getElementById('boomer')
+const watchCount = document.getElementById('millennial')
 let star = [] 
 let avengers = [] 
 let disney = [] 
@@ -75,12 +76,11 @@ const countMovies = () => {
   disneyCount.innerText = `Disney (${disney.length})`
 }
 
-// Counts movies anytime a movie is added to one of the lists
-document.addEventListener('click', function(e) {
-  if (e.target === addFavList || e.target === addWatchList) {
-    countMovies()
-  }
-})
+// Count amount in lists
+const countList = () => {
+  favCount.innerText = `favorites (${favorites.length})`
+  watchCount.innerText = `watch later (${watchLater.length})`
+}
 
 // Creates cards AND counts movies
 const createCards = (movieArr) => {
@@ -102,6 +102,7 @@ const createCards = (movieArr) => {
     ).join('')
   movieDisplayGrid.innerHTML = movieCards 
   countMovies()
+  countList()
 }
 
 // Link Filter
@@ -161,71 +162,46 @@ const createModalCard = (Poster, imdbID, Title) => {
   modalPopup.innerHTML = movieCard
 }
 
-// Add to list
-const addMovieToFav = () => {
-  const favCard = favorites
-  .map(
-    ({ Title, Year, Poster, imdbID }) => {
-      return (`
-        <div class="list-card" data-open="${imdbID}" data-item="${Title}">
-          <div class="card-body">
-            <img src=${Poster} alt="movie poster">
-            <div class="card-popup-box">
-              <div>${Year}</div>
-              <h3>${Title}</h3>
-            </div>
-          </div>
-          <div class="remove-card">Remove Card <i class="fas fa-times" data-close></i></div>
-        </div>
-      `) 
-    }
-  ).join('')
-  displayFavs.innerHTML = favCard
-
-    // Give classes to first 3 cards added
-  if (favorites.length === 1) {
-    displayFavs.childNodes[1].classList.add('active')
-  } else if (favorites.length === 2) {
-    displayFavs.childNodes[1].classList.add('active')
-    displayFavs.childNodes[3].classList.add('next')
-  } else if (favorites.length >= 3) {
-    displayFavs.childNodes[1].classList.add('active')
-    displayFavs.childNodes[3].classList.add('next')
-    displayFavs.childNodes[5].classList.add('prev')
-  } 
-}
-const addMovieToWatch = () => {
-  const watchCard = watchLater
-  .map(
-    ({ Title, Year, Poster, imdbID }) => {
-      return (`
-        <div class="list-card" data-open="${imdbID}" data-item="${Title}">
-          <div class="card-body">
-            <img src=${Poster} alt="movie poster">
-            <div class="card-popup-box">
-              <div>${Year}</div>
-              <h3>${Title}</h3>
-            </div>
-          </div>
-          <div class="remove-card">Remove Card <i class="fas fa-times" data-close></i></div>
-        </div>
-      `) 
-    }
-  ).join('')
-  displayWatch.innerHTML = watchCard
-
-  // Give classes to first 3 cards added
-  if (watchLater.length === 1) {
-    displayWatch.childNodes[1].classList.add('active')
-  } else if (watchLater.length === 2) {
-    displayWatch.childNodes[1].classList.add('active')
-    displayWatch.childNodes[3].classList.add('next')
-  } else if (watchLater.length >= 3) {
-    displayWatch.childNodes[1].classList.add('active')
-    displayWatch.childNodes[3].classList.add('next')
-    displayWatch.childNodes[5].classList.add('prev')
+// Add classes to first 3 cards added
+const addClasses = (arr, display) => {
+  if (arr.length === 1) {
+    display.childNodes[1].classList.add('active')
+  } else if (arr.length === 2) {
+    display.childNodes[1].classList.add('active')
+    display.childNodes[3].classList.add('next')
+  } else if (arr.length >= 3) {
+    display.childNodes[1].classList.add('active')
+    display.childNodes[3].classList.add('next')
+    display.childNodes[5].classList.add('prev')
   }
 }
+
+// Add movie to list
+const addMovieToList = (array, htmlLocation) => {
+  const card = array
+  .map(
+    ({ Title, Year, Poster, imdbID }) => {
+      return (`
+        <div class="list-card" data-open="${imdbID}" data-item="${Title}">
+          <div class="card-body">
+            <img src=${Poster} alt="movie poster">
+            <div class="card-popup-box">
+              <div>${Year}</div>
+              <h3>${Title}</h3>
+            </div>
+          </div>
+          <div id="remove" class="remove-card">Remove Card <i class="fas fa-times" data-close></i></div>
+        </div>
+      `) 
+    }
+  ).join('')
+  htmlLocation.innerHTML = card
+
+  // Give classes to first 3 cards added
+  addClasses(array, htmlLocation)
+}
+
+const removeButton = document.getElementById('remove')
 
 // Add to favorites/watchLater, add back to main list 
 document.body.addEventListener('click', function(e) {
@@ -235,21 +211,26 @@ document.body.addEventListener('click', function(e) {
     removeMovieFromMovieArr(e, false)
   } else if (e.target.querySelector('.remove-card')) {
     if (e.target.children[1].classList.contains('favs-modal-body')) {
-      removeMovieFromListArr(e, true)
+      if (e.target.children[1].children[0].classList.contains('active')) {
+        removeMovieFromListArr(e, true)
+      } 
     } else if (e.target.children[1].classList.contains('watch-modal-body')) {
-      removeMovieFromListArr(e, false)
+      if (e.target.children[1].children[0].classList.contains('active')) {
+        removeMovieFromListArr(e, false)
+      }
     }
   }
 })
 
+// remove from movieArr
 const removeMovieFromMovieArr = (e, boolean) => {
   for (const movie of movieArr) {
     if (movie.Title === e.target.parentElement.children[0].innerText) {
       movieArr.splice(movieArr.indexOf(movie), 1)
       boolean ? favorites.push(movie) : watchLater.push(movie)
       createCards(movieArr)
-      boolean ? addMovieToFav() : addMovieToWatch()
-      removeFavOrWatch(e)
+      boolean ? addMovieToList(favorites, displayFavs) : addMovieToList(watchLater, displayWatch)
+      removeFavOrWatchFromDisplay(e)
       if (filter) {
         filterCards(filter)
       }
@@ -257,15 +238,16 @@ const removeMovieFromMovieArr = (e, boolean) => {
   }
 }
 
+// remove from favoriteArr or watchArr
 const removeMovieFromListArr = (e, boolean) => {
   for (const movie of boolean ? favorites : watchLater) {
     const nodes = e.target.children[1].children
-    console.log(nodes);
+    // console.log(nodes);
     for(const i of nodes) {
       if (i.classList.contains('active')) {
         boolean ? favorites.splice(favorites.indexOf(movie), 1) : watchLater.splice(watchLater.indexOf(movie), 1)
         movieArr.push(movie)
-        removeFavOrWatch(e)
+        removeFavOrWatchFromDisplay(e)
         removeElem(e.target.children[1].children[0])
         createCards(movieArr)
       }
@@ -273,7 +255,8 @@ const removeMovieFromListArr = (e, boolean) => {
   }
 }
 
-const removeFavOrWatch = (e) => {
+//  remove from display
+const removeFavOrWatchFromDisplay = (e) => {
   if (e.target.parentElement.parentElement.parentElement === document.querySelector('.modal.is-visible')) {
     document.querySelector('.modal.is-visible').classList.remove(isVisible)
     document.addEventListener('click', function(e) {
@@ -368,6 +351,8 @@ const removeElem = (elm) => {
   if (elm.classList.contains('active')) {
     elm.remove()
   } else if (elm.parentElement.classList.contains('movie-modal')) {
+    elm.remove()
+  } else if (elm.parentElement.classList.contains('modal')) {
     elm.remove()
   }
 }

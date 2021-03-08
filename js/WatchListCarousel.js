@@ -4,7 +4,7 @@ let watchPrev
 let watchSlides = []
 let watchButtons = []
 
-const setListPage = () => {
+const setWatchListPage = () => {
   watchSlides = document.querySelectorAll('.list-card')
   watchButtons = document.querySelectorAll('.watch-slide-ctrl-container button')
   
@@ -13,7 +13,7 @@ const setListPage = () => {
   }
 }
 
-document.getElementById('millennial').addEventListener('click', setListPage)
+document.getElementById('millennial').addEventListener('click', setWatchListPage)
 
 const goToNumWatch = (number) => {
   if (watchSlides.length === 2) {
