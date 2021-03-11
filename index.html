@@ -17,81 +17,48 @@
         <h2>API Project</h2>
       </div>
       <div class="navbar-nav">
-        <button class="navbar-toggler" aria-expanded="false" aria-controls="navbarDropdown">
+        <!-- <button class="navbar-toggler" aria-expanded="false" aria-controls="navbarDropdown">
           <span>&#9776;</span>
-        </button>
+        </button> -->
         <ul class="ul-defaults-none main-menu">
-          <li class="nav-item">Home</li>
-          <li id="boomer" class="nav-item" data-modal="favorites">Favorites</li>
-          <li id="millennial" class="nav-item" data-modal="watchLater">Watch Later</li>
+          <li class="nav-item show-list">show list</li>
         </ul>
       </div>
     </nav>
   </header>
 
   <!-- This section displays the cards, they can be filtered through by clicking li filter -->
-  <section class="api-section">
-    <div class="filter-container">
-      <ul class="api-filter-nav ul-defaults-none">
-        <!-- Rename all these to filter api types -->
-        <li id="all" data-filter="all" class="filter-link active">All</li>
-        <li id="starWars" data-filter="star" class="filter-link">Star Wars</li>
-        <li id="avengers" data-filter="avengers" class="filter-link">Avengers</li>
-        <li id="disney" data-filter="disney" class="filter-link">Disney</li>
-        <li id="" data-filter="alpha" class="filter-link">A-Z</li>
-        <li id="" data-filter="back-alpha" class="filter-link">Z-A</li>
-      </ul>
-    </div>
-      <div class="api-grid">
-        <!-- Movie Card Display -->
+  <section class="content-body">
+    <section class="api-section">
+      <div class="filter-container">
+        <ul class="api-filter-nav ul-defaults-none">
+          <!-- Rename all these to filter api types -->
+          <li id="all" data-filter="all" class="filter-link active">All</li>
+          <li id="starWars" data-filter="star" class="filter-link">Star Wars</li>
+          <li id="avengers" data-filter="avengers" class="filter-link">Avengers</li>
+          <li id="disney" data-filter="disney" class="filter-link">Disney</li>
+          <li id="" data-filter="alpha" class="filter-link">A-Z</li>
+          <li id="" data-filter="back-alpha" class="filter-link">Z-A</li>
+        </ul>
       </div>
+        <div class="api-grid">
+          <!-- Movie Card Display -->
+        </div>
+    </section>
+  
+    <section class="check-out">
+      <header class="list-header">
+        Howdy Y'all
+      </header>
+      <div class="list-content">
+        Add some movies!
+        <!-- dynamically create content -->
+      </div>
+      
+    </section>
   </section>
-
-    <!-- favorites Modal -->
-    <div id="favorites" class="modal page-block" data-animation="zoomInOut">
-      <div class="container-fluid">
-        <header class="modal-header">
-          <h3>favorites</h3>
-          <i class="fas fa-times" data-close></i>
-        </header>
-        <div class="favs-modal-body">
-          <!-- dynamically created -->
-        </div>
-        <div class="slide-ctrl-container">
-          <button>
-            <i class="fas fa-arrow-left"></i>
-          </button>
-          <button>
-            <i class="fas fa-arrow-right"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- watch later Modal -->
-    <div id="watchLater" class="modal page-block" data-animation="zoomInOut">
-      <div class="container-fluid">
-        <header class="modal-header">
-          <h3>watch later</h3>
-          <i class="fas fa-times" data-close></i>
-        </header>
-        <div class="watch-modal-body">
-          <!-- dynamically created -->
-        </div>
-        <div class="watch-slide-ctrl-container">
-          <button>
-            <i class="fas fa-arrow-left"></i>
-          </button>
-          <button>
-            <i class="fas fa-arrow-right"></i>
-          </button>
-        </div>
-      </div>
-    </div>
   
   <script src="./js/main.js"></script>
   <script src="./js/effects.js"></script>
-  <script src="./js/FavCarousel.js"></script>
-  <script src="./js/WatchListCarousel.js"></script>
 </body>
 </html>
