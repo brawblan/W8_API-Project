@@ -123,3 +123,28 @@ button:not(:disabled):not(.disabled) {
   padding-top: 1.25rem;
   padding-bottom: 1.875rem;
 }
+
+.check-out-card,
+.card-btn-style {
+  background-color: var(--bg-panel);
+  padding: 8px 18px;
+  font-size: 15px;
+  line-height: 26px;
+  cursor: pointer;
+  text-transform: lowercase;
+  transition: 0.1s ease-in;
+  box-shadow: 1px 3px 2px rgb(104, 104, 104), 0 0 1px black;
+  border-radius: 8px;
+  border: transparent;
+  margin: 0 8px;
+}
+.card-btn-style:hover {
+  text-decoration: underline;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+}
+.card-btn-style:active {
+  position: relative;
+  top: 3px;
+  box-shadow: 0 0 1px black;
+}

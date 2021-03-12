@@ -7,12 +7,11 @@ const isVisible = 'is-visible'
 const dataFilter = '[data-filter]'
 const apiData = '[data-item]'
 const movieDisplayGrid = document.querySelector('.api-grid')
-const displayFavs = document.querySelector('.favs-modal-body')
-const displayWatch = document.querySelector('.watch-modal-body')
 let favorites = []
-let watchLater = []
 const addFavList = document.querySelector('.fa-plus.fav')
-const addWatchList = document.querySelector('.fa-plus.watch')
+const listToggle = document.querySelector('.show-list')
+const mobileListToggle = document.querySelector('.close-list')
+const listContainer = document.querySelector('.check-out')
 
 // Filter Names with Count
 const allCount = document.getElementById('all')
@@ -20,7 +19,6 @@ const starCount = document.getElementById('starWars')
 const avengersCount = document.getElementById('avengers')
 const disneyCount = document.getElementById('disney')
 const favCount = document.getElementById('boomer')
-const watchCount = document.getElementById('millennial')
 let star = [] 
 let avengers = [] 
 let disney = [] 
@@ -31,11 +29,13 @@ const apiItems = document.querySelectorAll(apiData)
 const searchBox = document.querySelector('#search')
 let movieArr = []
 
+// List 
+const listContent = document.querySelector('.list-content')
+
 // Modal
 const openModal = document.querySelectorAll(modalOpen)
 const closeModal = document.querySelectorAll(modalClose)
 const modalPopup = document.createElement('div')
-const removeMovieFromList = document.querySelectorAll('.remove-card')
 
 // Create Movie Cards
 const starWarsURL = 'https://www.omdbapi.com/?s=star_wars&Page=1&apikey=91651c1a'
@@ -76,12 +76,6 @@ const countMovies = () => {
   disneyCount.innerText = `Disney (${disney.length})`
 }
 
-// Count amount in lists
-const countList = () => {
-  favCount.innerText = `favorites (${favorites.length})`
-  watchCount.innerText = `watch later (${watchLater.length})`
-}
-
 // Creates cards AND counts movies
 const createCards = (movieArr) => {
   const movieCards = movieArr
@@ -102,7 +96,6 @@ const createCards = (movieArr) => {
     ).join('')
   movieDisplayGrid.innerHTML = movieCards 
   countMovies()
-  countList()
 }
 
 // Link Filter
@@ -154,7 +147,6 @@ const createModalCard = (Poster, imdbID, Title) => {
         <div class="modal-content">
           <h3>${Title}</h3>
           <h4>add to Favorites <i class="fas fa-plus fav" data-add></i></h4> 
-          <h4>add to Watch Later <i class="fas fa-plus watch" data-add></i></h4> 
         </div>
       </div>
     </div>
@@ -162,74 +154,54 @@ const createModalCard = (Poster, imdbID, Title) => {
   modalPopup.innerHTML = movieCard
 }
 
-// Add classes to first 3 cards added
-const addClasses = (arr, display) => {
-  if (arr.length === 1) {
-    display.childNodes[1].classList.add('active')
-  } else if (arr.length === 2) {
-    display.childNodes[1].classList.add('active')
-    display.childNodes[3].classList.add('next')
-  } else if (arr.length >= 3) {
-    display.childNodes[1].classList.add('active')
-    display.childNodes[3].classList.add('next')
-    display.childNodes[5].classList.add('prev')
+// Open List
+listToggle.addEventListener('click', () => {
+  if (listContainer.classList.contains('list-active')) {
+    listContainer.classList.remove('list-active')
+  } else {
+    listContainer.classList.add('list-active')
   }
-}
+})
+mobileListToggle.addEventListener('click', () => {
+  if (listContainer.classList.contains('list-active')) {
+    listContainer.classList.remove('list-active')
+  } else {
+    listContainer.classList.add('list-active')
+  }
+})
 
 // Add movie to list
 const addMovieToList = (array, htmlLocation) => {
   const card = array
   .map(
-    ({ Title, Year, Poster, imdbID }) => {
+    ({ Title }) => {
       return (`
-        <div class="list-card" data-open="${imdbID}" data-item="${Title}">
-          <div class="card-body">
-            <img src=${Poster} alt="movie poster">
-            <div class="card-popup-box">
-              <div>${Year}</div>
-              <h3>${Title}</h3>
-            </div>
-          </div>
-          <div id="remove" class="remove-card">Remove Card <i class="fas fa-times" data-close></i></div>
-        </div>
+      <div class="list-card">
+        <h3>${Title}</h3>
+        <div class="remove-title card-btn-style" onclick="removeMovie()">Remove Title <i class="fas fa-times" data-close></i></div>
+      </div>
       `) 
     }
   ).join('')
   htmlLocation.innerHTML = card
-
-  // Give classes to first 3 cards added
-  addClasses(array, htmlLocation)
 }
 
-const removeButton = document.getElementById('remove')
-
-// Add to favorites/watchLater, add back to main list 
+// Add to favorites, add back to main list 
+// This should just add to list or add back to main list/////might break up into 2 separate events
 document.body.addEventListener('click', function(e) {
   if (e.target.querySelector('.fa-plus.fav')) {
     removeMovieFromMovieArr(e, true)
-  } else if (e.target.querySelector('.fa-plus.watch')) {
-    removeMovieFromMovieArr(e, false)
-  } else if (e.target.querySelector('.remove-card')) {
-    if (e.target.children[1].classList.contains('favs-modal-body')) {
-      if (e.target.children[1].children[0].classList.contains('active')) {
-        removeMovieFromListArr(e, true)
-      } 
-    } else if (e.target.children[1].classList.contains('watch-modal-body')) {
-      if (e.target.children[1].children[0].classList.contains('active')) {
-        removeMovieFromListArr(e, false)
-      }
-    }
   }
 })
 
 // remove from movieArr
-const removeMovieFromMovieArr = (e, boolean) => {
+const removeMovieFromMovieArr = (e) => {
   for (const movie of movieArr) {
     if (movie.Title === e.target.parentElement.children[0].innerText) {
       movieArr.splice(movieArr.indexOf(movie), 1)
-      boolean ? favorites.push(movie) : watchLater.push(movie)
+      favorites.push(movie)
       createCards(movieArr)
-      boolean ? addMovieToList(favorites, displayFavs) : addMovieToList(watchLater, displayWatch)
+      addMovieToList(favorites, listContent)
       removeFavOrWatchFromDisplay(e)
       if (filter) {
         filterCards(filter)
@@ -239,56 +211,33 @@ const removeMovieFromMovieArr = (e, boolean) => {
 }
 
 // remove from favoriteArr or watchArr
-const removeMovieFromListArr = (e, boolean) => {
-  for (const movie of boolean ? favorites : watchLater) {
-    const nodes = e.target.children[1].children
-    // console.log(nodes);
-    for(const i of nodes) {
-      if (i.classList.contains('active')) {
-        boolean ? favorites.splice(favorites.indexOf(movie), 1) : watchLater.splice(watchLater.indexOf(movie), 1)
-        movieArr.push(movie)
-        removeFavOrWatchFromDisplay(e)
-        removeElem(e.target.children[1].children[0])
-        createCards(movieArr)
-      }
+const removeMovie = () => {
+  if (favorites.length) {
+    const removeBtn = document.querySelectorAll('.remove-title')
+    for (const i of removeBtn)
+    i.parentElement.addEventListener('click', (e) => {
+      removeMovieFromListArr(e)
+    })
+  }
+}
+
+const removeMovieFromListArr = (e) => {
+  for (const movie of favorites) {
+    if (e.target.parentElement.children[0].innerText === movie.Title) {
+      favorites.splice(favorites.indexOf(movie), 1)
+      movieArr.push(movie)
+      createCards(movieArr)
+      addMovieToList(favorites, listContent)
     }
   }
 }
 
-//  remove from display
+//  remove modal from display
 const removeFavOrWatchFromDisplay = (e) => {
   if (e.target.parentElement.parentElement.parentElement === document.querySelector('.modal.is-visible')) {
     document.querySelector('.modal.is-visible').classList.remove(isVisible)
-    document.addEventListener('click', function(e) {
-      const elm = document.getElementById(e.target.parentElement.parentElement.parentElement.id)
-      if (elm) {
-        removeElem(elm)
-      }
-    })
   }
 }
-
-// Full Site Modal open (favs and watch later)
-document.body.addEventListener('click', function() {
-  for (const elm of document.querySelectorAll('[data-modal]')) {
-    elm.addEventListener('click', () => {
-      const modalId = elm.dataset.modal
-      for (const i of modalPopup.children) {
-        if (i.id === modalId) {
-          console.log(i);
-          document.body.appendChild(i)
-        }
-      }
-      setTimeout(function() {
-        document.getElementById(modalId).classList.add(isVisible)
-        const elm = document.getElementById('all')
-        filter = 'all'
-        setFilterActive(elm, '.filter-link')
-        filterCards(filter)
-      }, 100)
-    })
-  }
-})
 
 // Movie Poster Popup Modal open
 document.body.addEventListener('click', function() {
@@ -324,35 +273,3 @@ document.body.addEventListener('click', function() {
     })
   }
 })
-
-// Remove Modals w/click
-document.addEventListener('click', (e) => {
-  if (e.target === document.querySelector('.modal.is-visible')) {
-    const elm = document.querySelector('.modal.is-visible')
-    elm.classList.remove(isVisible)
-    removeElem(elm)
-  } else if (e.target.parentElement === document.querySelector('.movie-modal-header')) {
-    const elm = document.querySelector('.movie-modal-header')
-    removeElem(elm)
-  }
-})
-
-// Remove Modals w/ESC
-document.body.addEventListener('keyup', (e) => {
-  if (e.key === 'Escape') {
-    const elm = document.querySelector('.modal.is-visible')
-    elm.classList.remove(isVisible)
-    removeElem(elm)
-  }
-})
-
-// Remove Modals from DOM
-const removeElem = (elm) => {
-  if (elm.classList.contains('active')) {
-    elm.remove()
-  } else if (elm.parentElement.classList.contains('movie-modal')) {
-    elm.remove()
-  } else if (elm.parentElement.classList.contains('modal')) {
-    elm.remove()
-  }
-}
