@@ -10,6 +10,7 @@ const movieDisplayGrid = document.querySelector('.api-grid')
 let favorites = []
 const addFavList = document.querySelector('.fa-plus.fav')
 const listToggle = document.querySelector('.show-list')
+const mobileListToggle = document.querySelector('.close-list')
 const listContainer = document.querySelector('.check-out')
 
 // Filter Names with Count
@@ -161,6 +162,13 @@ listToggle.addEventListener('click', () => {
     listContainer.classList.add('list-active')
   }
 })
+mobileListToggle.addEventListener('click', () => {
+  if (listContainer.classList.contains('list-active')) {
+    listContainer.classList.remove('list-active')
+  } else {
+    listContainer.classList.add('list-active')
+  }
+})
 
 // Add movie to list
 const addMovieToList = (array, htmlLocation) => {
@@ -170,7 +178,7 @@ const addMovieToList = (array, htmlLocation) => {
       return (`
       <div class="list-card">
         <h3>${Title}</h3>
-        <div class="remove-title" onclick="removeMovie()">Remove Title <i class="fas fa-times" data-close></i></div>
+        <div class="remove-title card-btn-style" onclick="removeMovie()">Remove Title <i class="fas fa-times" data-close></i></div>
       </div>
       `) 
     }
@@ -183,12 +191,6 @@ const addMovieToList = (array, htmlLocation) => {
 document.body.addEventListener('click', function(e) {
   if (e.target.querySelector('.fa-plus.fav')) {
     removeMovieFromMovieArr(e, true)
-  } else if (e.target.querySelector('.remove-card')) {
-    if (e.target.children[1].classList.contains('favs-modal-body')) {
-      if (e.target.children[1].children[0].classList.contains('active')) {
-        removeMovieFromListArr(e, true)
-      } 
-    }
   }
 })
 
