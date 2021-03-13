@@ -1,4 +1,3 @@
-// Global Variables
 const open = 'open'
 const active = 'active'
 const modalOpen = '[data-open]'
@@ -7,11 +6,11 @@ const isVisible = 'is-visible'
 const dataFilter = '[data-filter]'
 const apiData = '[data-item]'
 const movieDisplayGrid = document.querySelector('.api-grid')
-let favorites = []
 const addFavList = document.querySelector('.fa-plus.fav')
 const listToggle = document.querySelector('.show-list')
 const mobileListToggle = document.querySelector('.close-list')
 const listContainer = document.querySelector('.check-out')
+let favorites = []
 
 // Filter Names with Count
 const allCount = document.getElementById('all')
@@ -21,7 +20,10 @@ const disneyCount = document.getElementById('disney')
 const favCount = document.getElementById('boomer')
 let star = [] 
 let avengers = [] 
-let disney = [] 
+let disney = []
+const starWarsListCount = document.getElementById('starWarsList')
+const avengersListCount = document.getElementById('avengersList')
+const disneyListCount = document.getElementById('disneyList')
 
 // Movie APIs
 const filterLink = document.querySelectorAll(dataFilter)
@@ -43,7 +45,7 @@ const avengersURL = 'https://www.omdbapi.com/?s=avengers&Page=1&apikey=91651c1a'
 const disneyURL = 'https://www.omdbapi.com/?s=disney&Page=3&apikey=91651c1a'
 const movieURLs = [starWarsURL, avengersURL, disneyURL]
 
-// Functions //////////////////////////////////////////////////
+// call API
 const filterURLs = async () => {
   for (const url of movieURLs) {
     const res = await fetch(url)
@@ -74,6 +76,9 @@ const countMovies = () => {
   starCount.innerText = `Star Wars (${star.length})`
   avengersCount.innerText = `Avengers (${avengers.length})`
   disneyCount.innerText = `Disney (${disney.length})`
+  starWarsListCount.innerText = `Star Wars (${10 - star.length})`
+  avengersListCount.innerText = `Avengers (${10 - avengers.length})`
+  disneyListCount.innerText = `Disney (${10 - disney.length})`
 }
 
 // Creates cards AND counts movies
@@ -187,7 +192,6 @@ const addMovieToList = (array, htmlLocation) => {
 }
 
 // Add to favorites, add back to main list 
-// This should just add to list or add back to main list/////might break up into 2 separate events
 document.body.addEventListener('click', function(e) {
   if (e.target.querySelector('.fa-plus.fav')) {
     removeMovieFromMovieArr(e, true)
@@ -210,7 +214,7 @@ const removeMovieFromMovieArr = (e) => {
   }
 }
 
-// remove from favoriteArr or watchArr
+// remove from list
 const removeMovie = () => {
   if (favorites.length) {
     const removeBtn = document.querySelectorAll('.remove-title')
@@ -220,7 +224,6 @@ const removeMovie = () => {
     })
   }
 }
-
 const removeMovieFromListArr = (e) => {
   for (const movie of favorites) {
     if (e.target.parentElement.children[0].innerText === movie.Title) {

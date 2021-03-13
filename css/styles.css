@@ -11,6 +11,11 @@
   display: flex;
 }
 
+.nav-item {
+  font-size: 1.5rem;
+  font-style: oblique;
+}
+
 /* API search */
 .filter-container {
   display: flex;
@@ -146,12 +151,22 @@
   display: block;
 }
 
-.close-list {
-  display: none;
+.list-header {
+  display: flex;
+  flex-direction: column;
 }
 
-.list-header {
-  text-align: center;
+.close-list {
+  display: none;
+  justify-content: center;
+  align-self: center;
+  width: fit-content;
+  margin-bottom: 1rem;
+}
+
+.list-count {
+  display: flex;
+  justify-content: space-evenly;
 }
 
 .list-card {
@@ -180,7 +195,6 @@
   top: 3px;
 }
 
-/* ///////////////////////////////////////?? */
 /* Modals */
 .modal {
   display: flex;
@@ -326,6 +340,6 @@
     justify-content: center;
   }
   .close-list {
-    display: flex;
+    display: block;
   }
 }
