@@ -1,13 +1,9 @@
 :root {
   --bg: #f5f5f5;
-  --bg-panel: #fff;
-  --bg-modal: #161c2d;
   --color-headings: #161c2d;
   --color-text-opacity: rgba(22, 28, 45, 0.7);
   --color-text: #161c2d;
-  --color-text-base: #161c2d;
   --color-text-modal: #fff;
-  --border: #383f53;
 }
 
 section,
@@ -50,9 +46,6 @@ h4 {
   margin-bottom: 0.5rem;
 }
 
-p {
-  margin-top: 0;
-}
 button {
   outline: none;
 }
@@ -76,57 +69,9 @@ button {
   padding: 0;
 }
 
-.btn {
-  font-weight: 700;
-  min-width: 175px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-transform: uppercase;
-  letter-spacing: 1.63px;
-  transition: 0.4s;
-  height: 65px;
-  padding-left: 30px;
-  padding-right: 30px;
-  box-shadow: 0 32px 54px rgba(3, 3, 3, 0.12);
-}
-
-.btn:not(:disabled):not(.disabled),
-button:not(:disabled):not(.disabled) {
-  cursor: pointer;
-}
-
-.btn-primary,
-.btn-primary a {
-  color: #fff;
-  background-color: #495fef;
-  border-color: #495fef;
-}
-
-.round-pill {
-  border-radius: 50rem;
-}
-
-.header-lg {
-  font-size: 5rem;
-  letter-spacing: -2.5px;
-  line-height: 1.05;
-}
-.header-md {
-  font-size: 3rem;
-  letter-spacing: -2px;
-}
-
-.sub-header {
-  font-size: 1.3125rem;
-  line-height: 1.5;
-  padding-top: 1.25rem;
-  padding-bottom: 1.875rem;
-}
-
 .check-out-card,
 .card-btn-style {
-  background-color: var(--bg-panel);
+  background-color: var(--bg);
   padding: 8px 18px;
   font-size: 15px;
   line-height: 26px;
